@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launching Kidpreneur | CodeAGS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 0. Color Variables and Fonts --- */
+        :root {
+            --primary-color: #85c4ff;        /* Brighter Light Blue for Main Text */
+            --secondary-color: #2ecc71;      /* Vibrant Green for Accents */
+            --warning-color: #ffc107;        /* Yellow for Smart Band Warning */
+            --bg-dark: #0f0f0f;              /* Deep Black Background */
+            --card-dark: #1a1a1a;            /* Content Box Background */
+            --text-light: #f0f0f0;           /* White Text */
+            --font-main: 'Poppins', sans-serif;
+            --font-code: 'Roboto Mono', monospace;
+        }
+
+        /* --- 1. Base Styles & Layout --- */
+        body {
+            font-family: var(--font-main);
+            color: var(--text-light);
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden; 
+        }
+
+        .container {
+            max-width: 600px;
+            width: 90%;
+            padding: 40px;
+            background: var(--card-dark);
+            border-radius: 15px;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.6); 
+            z-index: 10; 
+            position: relative;
+            transition: max-width 0.5s, padding 0.5s, border-radius 0.5s, transform 0.3s;
+        }
+        
+        /* --- 2. Typography and Branding --- */
+        h1 {
+            color: var(--primary-color);
+            font-size: 3em; 
+            font-weight: 900; 
+            margin-bottom: 0.1em;
+            letter-spacing: 1px;
+            transition: font-size 0.5s;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-weight: 500; 
+        }
+
+        .codeags-logo {
+            font-family: var(--font-code);
+            font-weight: 700;
+            color: var(--secondary-color);
+            transition: color 0.3s;
+        }
+
+        #status-message {
+            font-size: 1.4em;
+            font-weight: 700; 
+            margin-top: 25px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        
+        /* New Style for Smart Band Warning */
+        .smartband-warning {
+            color: var(--warning-color);
+            font-weight: 700;
+            font-size: 1.1em;
+            padding: 15px;
+            border: 2px solid var(--warning-color);
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        /* --- 3. Loading Animation (Advanced Spinner) --- */
+        .loader-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+        .loader {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(133, 196, 255, 0.2); 
+            border-left-color: var(--primary-color); 
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+        .loader.hidden {
+            display: none; /* Hide loader for Smart Band message */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- 4. Fallback Links and Footer --- */
+        .fallback-links {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            font-size: 0.95em;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700; 
+            transition: color 0.3s;
+            padding: 0 10px;
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .powered-by {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #777;
+        }
+        
+        /* --- 5. Device-Specific Reshaping --- */
+        .mobile-layout .container { max-width: 95%; width: 95%; padding: 25px 15px; border-radius: 8px; }
+        .mobile-layout h1 { font-size: 2.2em; }
+        .tv-layout .container { max-width: 900px; padding: 80px; border-radius: 25px; background: rgba(26, 26, 26, 0.9); }
+        .tv-layout h1 { font-size: 4em; }
+        .tv-layout .loader { width: 80px; height: 80px; border-width: 8px; }
+
+        /* --- 6. Particle Background Animation (Pure CSS) --- */
+        #particle-bg {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; overflow: hidden; pointer-events: none;
+        }
+        .particle { background: rgba(133, 196, 255, 0.5); border-radius: 50%; animation: move-particles linear infinite; position: absolute; }
+        .particle:nth-child(1) { width: 10px; height: 10px; top: 10%; left: 10%; animation-duration: 15s; }
+        .particle:nth-child(2) { width: 20px; height: 20px; top: 50%; left: 30%; animation-duration: 20s; background: rgba(46, 204, 113, 0.5); }
+        .particle:nth-child(3) { width: 15px; height: 15px; top: 80%; left: 60%; animation-duration: 18s; }
+        .particle:nth-child(4) { width: 25px; height: 25px; top: 20%; left: 80%; animation-duration: 22s; background: rgba(46, 204, 113, 0.5); }
+        .particle:nth-child(5) { width: 12px; height: 12px; top: 70%; left: 20%; animation-duration: 16s; }
+        .particle:nth-child(6) { width: 18px; height: 18px; top: 30%; left: 90%; animation-duration: 25s; }
+        .particle:nth-child(7) { width: 8px; height: 8px; top: 60%; left: 5%; animation-duration: 19s; background: rgba(46, 204, 113, 0.5); }
+        .particle:nth-child(8) { width: 22px; height: 22px; top: 40%; left: 75%; animation-duration: 14s; }
+
+        @keyframes move-particles {
+            0% { transform: translate(0, 0); opacity: 0.8; }
+            50% { transform: translate(100px, 50px); opacity: 0.5; }
+            100% { transform: translate(0, 0); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particle-bg">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="container">
+        <h1>Kidpreneur</h1>
+        <p class="subtitle">An entrepreneurial initiative by <span class="codeags-logo">CodeAGS</span></p>
+
+        <div class="loader-wrapper">
+            <div class="loader" id="main-loader"></div>
+        </div>
+
+        <p id="status-message">Optimizing experience for your device...</p>
+        
+        <div class="fallback-links" id="fallback-links">
+            <p>If the automatic redirection fails, please select your device type:</p>
+            <p>
+                <a href="https://avivvasani.github.io/kidpreneur_pc">Desktop / PC</a> | 
+                <a href="https://avivvasani.github.io/kidpreneur_m">Mobile / Tablet</a> |
+                <a href="https://avivvasani.github.io/kidpreneur_tv">Smart TV</a> |
+                <a href="https://avivvasani.github.io/kidpreneur_vr">VR Headset</a>
+            </p>
+        </div>
+
+        <div class="powered-by">
+            &copy; 2025 CodeAGS. All Rights Reserved.
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Function to detect the device type (PC, Mobile, TV, VR, SW, or SB)
+        function getDeviceType() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const uaLower = userAgent.toLowerCase();
+            
+            // 1. Smart Band (SB) - Hardest to detect reliably, often overlaps with basic wearables.
+            // Using generic 'band' terms and a quick return for specific user agent markers.
+            const bandKeywords = /band|fitnessband|mi-?band/i;
+            if (bandKeywords.test(uaLower) && !(/watch|wearos|tizen/i.test(uaLower))) {
+                 return 'SmartBand';
+            }
+
+            // 2. VR Headset (VR) - Checks for common VR/AR platform identifiers
+            const vrKeywords = /oculus|vr|ar|mixedreality|cardboard|vive|gearvr|pico/i;
+            if (vrKeywords.test(uaLower)) {
+                return 'VR';
+            }
+
+            // 3. Smart Watch (SW) - Checks for WearOS, Watch, Tizen (Samsung)
+            const swKeywords = /watch|wearos|tizen|applewebkit.*like android/i;
+            if (swKeywords.test(uaLower)) {
+                return 'SmartWatch';
+            }
+
+            // 4. Smart TV (TV) - Checks for common TV/console identifiers
+            const tvKeywords = /smarttv|googletv|appletv|hbbtv|nintendo|playstation|xbox|roku|firetv|tizen|aftb|tv-?os/i;
+            if (tvKeywords.test(uaLower)) {
+                return 'TV';
+            }
+
+            // 5. Mobile/Tablet
+            const mobileRegex = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|xo)|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i;
+            if (mobileRegex.test(userAgent) || mobileRegex.test(userAgent.substr(0, 4))) {
+                return 'Mobile';
+            }
+
+            // 6. Default to PC/Desktop
+            return 'PC';
+        }
+
+        window.onload = function() {
+            const statusMessage = document.getElementById('status-message');
+            const mainLoader = document.getElementById('main-loader');
+            const fallbackLinks = document.getElementById('fallback-links');
+
+            const deviceType = getDeviceType();
+            let redirectUrl;
+            let layoutClass;
+
+            switch (deviceType) {
+                case 'Mobile':
+                    redirectUrl = "https://avivvasani.github.io/kidpreneur_m";
+                    layoutClass = 'mobile-layout';
+                    break;
+                case 'TV':
+                    redirectUrl = "https://avivvasani.github.io/kidpreneur_tv";
+                    layoutClass = 'tv-layout';
+                    break;
+                case 'VR':
+                    redirectUrl = "https://avivvasani.github.io/kidpreneur_vr";
+                    layoutClass = 'pc-layout'; // Use default/PC layout
+                    break;
+                case 'SmartWatch':
+                    // Custom action for Smart Band: Stop redirection and show message
+                    statusMessage.innerHTML = `<span style="color:var(--warning-color);">Device Detected: Smart Band</span>`;
+                    
+                    // Hide loader and links not necessary for Smart Band message
+                    mainLoader.classList.add('hidden'); 
+                    fallbackLinks.style.display = 'none';
+
+                    // Display custom message
+                    const container = document.querySelector('.container');
+                    const bandWarning = document.createElement('p');
+                    bandWarning.className = 'smartband-warning';
+                    bandWarning.textContent = "We do not currently offer a website optimized for Smart Bands. Please try accessing the site on a PC or Mobile device.";
+                    container.insertBefore(bandWarning, fallbackLinks);
+                    return; // Stop execution to prevent redirection
+                    break;
+                case 'SmartBand':
+                    // Custom action for Smart Band: Stop redirection and show message
+                    statusMessage.innerHTML = `<span style="color:var(--warning-color);">Device Detected: Smart Band</span>`;
+                    
+                    // Hide loader and links not necessary for Smart Band message
+                    mainLoader.classList.add('hidden'); 
+                    fallbackLinks.style.display = 'none';
+
+                    // Display custom message
+                    const container = document.querySelector('.container');
+                    const bandWarning = document.createElement('p');
+                    bandWarning.className = 'smartband-warning';
+                    bandWarning.textContent = "We do not currently offer a website optimized for Smart Bands. Please try accessing the site on a PC or Mobile device.";
+                    container.insertBefore(bandWarning, fallbackLinks);
+                    return; // Stop execution to prevent redirection
+                case 'PC':
+                default:
+                    redirectUrl = "https://avivvasani.github.io/kidpreneur_pc";
+                    layoutClass = 'pc-layout';
+                    break;
+            }
+
+            // Apply device-specific class for visual reshaping
+            document.body.classList.add(layoutClass);
+
+            // Update the message with the detected device
+            statusMessage.textContent = `Device Detected: ${deviceType}, Redirecting...`;
+
+            // Wait for 3 seconds before redirecting
+            setTimeout(function() {
+                window.location.href = redirectUrl;
+            }, 3000); 
+        };
+    </script>
+
+</body>
+</html>
